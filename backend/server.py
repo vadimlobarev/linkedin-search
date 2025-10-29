@@ -79,6 +79,10 @@ async def search_linkedin_profiles(request: SearchRequest):
     Search LinkedIn profiles using Google Custom Search API
     """
     try:
+        # Validate keywords
+        if not request.keywords or not request.keywords.strip():
+            raise HTTPException(status_code=422, detail="Keywords are required")
+        
         # Build search query
         query_parts = [request.keywords]
         
