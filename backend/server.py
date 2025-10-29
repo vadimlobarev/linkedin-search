@@ -134,7 +134,12 @@ async def save_profile(profile: LinkedInProfileCreate):
         if existing:
             raise HTTPException(status_code=400, detail="Profile already saved")
         
-        profile_obj = LinkedInProfile(**profile.model_dump())
+        # Handle tags field properly
+        profile_data = profile.model_dump()
+        if profile_data.get('tags') is None:
+            profile_data['tags'] = []
+        
+        profile_obj = LinkedInProfile(**profile_data)
         
         # Convert to dict and serialize datetime
         doc = profile_obj.model_dump()
